@@ -1,0 +1,49 @@
+dubbo:
+  application:
+    logger: slf4j
+    name: ${spring.application.name}
+    ## dubbo qos监控模块，做测试，暂不开启
+    qos-enable: false
+  registry:
+    address: nacos://${spring.cloud.nacos.server-addr:127.0.0.1:8848}?username=nacos&password=nacos
+  protocol:
+    port: 20880
+    name: tri
+mybatis-plus:
+  type-aliases-package: com.yzkj.stater
+  mapper-locations: classpath*:com/yzkj/starter/mapper/*.xml
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    global-config:
+      banner: false
+spring:
+  messages:
+    basename: messages/starter, com/yzkj/framework/messages/framework  #引入其他的包设置
+    encoding: UTF-8
+  profiles:
+    active: dev
+  application:
+    name: mvc-starter
+  cloud:
+    nacos:
+      server-addr: 127.0.0.1:8848
+      # 从Nacos读取配置项的超时时间
+      username: nacos
+      password: nacos
+      config:
+        timeout: 5000
+        namespace: 6f1950da-030a-42f4-a6b8-f076f73789d
+        # 配置文件后缀名为yaml
+        file-extension: yaml
+        shared-configs:
+          - data-id: swagger-enable.${spring.cloud.nacos.config.file-extension}
+            refresh: true
+          - data-id: redis-${spring.profiles.active}.${spring.cloud.nacos.config.file-extension}
+            refresh: true
+          - data-id: legacy-login-${spring.profiles.active}.${spring.cloud.nacos.config.file-extension}
+            refresh: true
+      discovery:
+        namespace: 6f1950da-030a-42f4-a6b8-f076f73789d
+        server-addr: 127.0.0.1:8848
+        username: nacos
+        password: nacos
